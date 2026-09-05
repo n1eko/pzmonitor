@@ -3185,6 +3185,19 @@
       ]
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 118,
+      "panels": [],
+      "title": "Skills",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -3220,7 +3233,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 82
+        "y": 83
       },
       "id": 116,
       "options": {
@@ -3250,21 +3263,19 @@
       ],
       "transformations": [
         {
-          "id": "labelsToFields",
+          "id": "groupingToMatrix",
           "options": {
-            "mode": "columns",
-            "valueLabel": "perk"
+            "columnField": "perk",
+            "rowField": "username",
+            "valueField": "Value"
           }
         },
         {
           "id": "organize",
           "options": {
-            "excludeByName": {
-              "Time": true,
-              "Value": true
-            },
+            "excludeByName": {},
             "renameByName": {
-              "username": "User"
+              "username\\perk": "User"
             }
           }
         }
@@ -3273,12 +3284,73 @@
       "type": "table"
     },
     {
+      "id": 117,
+      "type": "timeseries",
+      "title": "$perk",
+      "description": "Level progression per character. Each step marks a level up.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 93,
+        "w": 8,
+        "h": 6
+      },
+      "repeat": "perk",
+      "repeatDirection": "h",
+      "maxPerRow": 3,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "min": 0,
+          "decimals": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "axisSoftMax": 10
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "pz_character_perk_level{perk=\"$perk\"}",
+          "refId": "A",
+          "legendFormat": "{{username}}"
+        }
+      ]
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 92
+        "y": 99
       },
       "id": 104,
       "panels": [],
@@ -3360,7 +3432,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 93
+        "y": 100
       },
       "id": 40,
       "options": {
@@ -3467,7 +3539,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 93
+        "y": 100
       },
       "id": 41,
       "options": {
@@ -3512,7 +3584,36 @@
     "gaming"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(pz_character_perk_level, perk)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Skill",
+        "multi": true,
+        "name": "perk",
+        "options": [],
+        "query": "label_values(pz_character_perk_level, perk)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
