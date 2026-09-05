@@ -37,6 +37,10 @@ type Character struct {
 	PerkLevels                    map[string]int
 	HoursSurvived                 float64
 	ZombieKills, SurvivorKills    int
+	ReadBooks                     int
+	KnownRecipes                  int
+	ReadLiterature                int
+	ReadPrintMedia                int
 }
 
 // Health returns the average body part health (0-100).
@@ -373,12 +377,14 @@ func Parse(blob []byte) (*Character, error) {
 	r.u8()  // onFire
 	r.skip(8 * 4)
 	n := r.count() // readBooks
+	c.ReadBooks = n
 	for i := 0; i < n && r.err == nil; i++ {
 		r.str()
 		r.i32()
 	}
 	r.f32()
 	n = r.count() // knownRecipes
+	c.KnownRecipes = n
 	for i := 0; i < n && r.err == nil; i++ {
 		r.str()
 	}
@@ -386,11 +392,13 @@ func Parse(blob []byte) (*Character, error) {
 	r.skip(3 * 4)
 	r.skip(15)    // cheat flags
 	n = r.count() // readLiterature
+	c.ReadLiterature = n
 	for i := 0; i < n && r.err == nil; i++ {
 		r.str()
 		r.i32()
 	}
 	n = r.count() // readPrintMedia
+	c.ReadPrintMedia = n
 	for i := 0; i < n && r.err == nil; i++ {
 		r.str()
 	}

@@ -109,6 +109,10 @@ as the same user as the server.
 | `pz_character_perk_level` | `username`, `perk` | Skill levels |
 | `pz_character_position` | `username`, `axis` | Last saved x/y/z |
 | `pz_character_items` | `username` | Item stacks in inventory |
+| `pz_character_read_books` | `username` | Books read |
+| `pz_character_known_recipes` | `username` | Recipes learned |
+| `pz_character_read_literature` | `username` | Magazines/comics read |
+| `pz_character_read_print_media` | `username` | Newspapers/flyers read |
 | `pz_players_db_up` / `pz_players_db_scrape_duration_seconds` / `pz_players_db_parse_errors` | | Read health |
 
 The save format is undocumented and changes between builds; parsing was

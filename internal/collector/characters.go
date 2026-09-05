@@ -28,6 +28,10 @@ type CharacterCollector struct {
 	perkLevel      *prometheus.Desc
 	position       *prometheus.Desc
 	items          *prometheus.Desc
+	readBooks      *prometheus.Desc
+	knownRecipes   *prometheus.Desc
+	readLiterature *prometheus.Desc
+	readPrintMedia *prometheus.Desc
 }
 
 func NewCharacterCollector(db *playersdb.DB, timeout time.Duration) *CharacterCollector {
@@ -49,12 +53,17 @@ func NewCharacterCollector(db *playersdb.DB, timeout time.Duration) *CharacterCo
 		perkLevel:      prometheus.NewDesc("pz_character_perk_level", "Perk level", []string{"username", "perk"}, nil),
 		position:       prometheus.NewDesc("pz_character_position", "Last saved world position", []string{"username", "axis"}, nil),
 		items:          prometheus.NewDesc("pz_character_items", "Item stacks in the main inventory", l, nil),
+		readBooks:      prometheus.NewDesc("pz_character_read_books", "Books read by the character", l, nil),
+		knownRecipes:   prometheus.NewDesc("pz_character_known_recipes", "Recipes learned by the character", l, nil),
+		readLiterature: prometheus.NewDesc("pz_character_read_literature", "Literature items (magazines, comics, ...) read by the character", l, nil),
+		readPrintMedia: prometheus.NewDesc("pz_character_read_print_media", "Print media (newspapers, flyers, ...) read by the character", l, nil),
 	}
 }
 
 func (c *CharacterCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, d := range []*prometheus.Desc{c.up, c.scrapeDuration, c.parseErrors, c.info, c.dead, c.hoursSurvived,
-		c.zombieKills, c.survivorKills, c.health, c.stat, c.perkLevel, c.position, c.items} {
+		c.zombieKills, c.survivorKills, c.health, c.stat, c.perkLevel, c.position, c.items,
+		c.readBooks, c.knownRecipes, c.readLiterature, c.readPrintMedia} {
 		ch <- d
 	}
 }
@@ -93,6 +102,10 @@ func (c *CharacterCollector) Collect(ch chan<- prometheus.Metric) {
 		gauge(c.survivorKills, float64(p.SurvivorKills), u)
 		gauge(c.health, p.Health(), u)
 		gauge(c.items, float64(p.Items), u)
+		gauge(c.readBooks, float64(p.ReadBooks), u)
+		gauge(c.knownRecipes, float64(p.KnownRecipes), u)
+		gauge(c.readLiterature, float64(p.ReadLiterature), u)
+		gauge(c.readPrintMedia, float64(p.ReadPrintMedia), u)
 		for name, v := range p.Stats {
 			gauge(c.stat, v, u, name)
 		}

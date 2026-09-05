@@ -2921,6 +2921,54 @@
           "format": "table",
           "legendFormat": "",
           "expr": "max by (username, name, profession) (pz_character_items * on(username) group_left(name, profession) pz_character_info)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "H",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "",
+          "expr": "max by (username, name, profession) (pz_character_read_books * on(username) group_left(name, profession) pz_character_info)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "I",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "",
+          "expr": "max by (username, name, profession) (pz_character_known_recipes * on(username) group_left(name, profession) pz_character_info)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "J",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "",
+          "expr": "max by (username, name, profession) (pz_character_read_literature * on(username) group_left(name, profession) pz_character_info)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "K",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "",
+          "expr": "max by (username, name, profession) (pz_character_read_print_media * on(username) group_left(name, profession) pz_character_info)"
         }
       ],
       "transformations": [
@@ -2943,7 +2991,11 @@
               "Value #D": 5,
               "Value #E": 6,
               "Value #F": 7,
-              "Value #G": 8
+              "Value #G": 8,
+              "Value #H": 9,
+              "Value #I": 10,
+              "Value #J": 11,
+              "Value #K": 12
             },
             "renameByName": {
               "username": "User",
@@ -2954,7 +3006,11 @@
               "Value #D": "Survivor Kills",
               "Value #E": "Health",
               "Value #F": "Dead",
-              "Value #G": "Items"
+              "Value #G": "Items",
+              "Value #H": "Books",
+              "Value #I": "Recipes",
+              "Value #J": "Literature",
+              "Value #K": "Print Media"
             }
           }
         }
@@ -3129,12 +3185,100 @@
       ]
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Perk levels per character from players.db. Blank means the skill was never leveled up.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 116,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "User",
+            "desc": false
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "",
+          "expr": "pz_character_perk_level"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "perk"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true
+            },
+            "renameByName": {
+              "username": "User"
+            }
+          }
+        }
+      ],
+      "title": "Skill Levels",
+      "type": "table"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 92
       },
       "id": 104,
       "panels": [],
@@ -3216,7 +3360,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 85
+        "y": 93
       },
       "id": 40,
       "options": {
@@ -3323,7 +3467,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 85
+        "y": 93
       },
       "id": 41,
       "options": {

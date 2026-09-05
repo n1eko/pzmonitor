@@ -40,6 +40,10 @@ func TestParseFixture(t *testing.T) {
 	if c.Items != 12 || len(c.Traits) != 5 {
 		t.Errorf("items=%d traits=%d", c.Items, len(c.Traits))
 	}
+	if c.ReadBooks != 0 || c.KnownRecipes != 0 || c.ReadLiterature != 0 || c.ReadPrintMedia != 0 {
+		t.Errorf("readBooks=%d knownRecipes=%d readLiterature=%d readPrintMedia=%d",
+			c.ReadBooks, c.KnownRecipes, c.ReadLiterature, c.ReadPrintMedia)
+	}
 }
 
 func TestParseTruncated(t *testing.T) {
@@ -73,6 +77,8 @@ func TestLiveDB(t *testing.T) {
 		if c.Forename+" "+c.Surname != r.Name {
 			t.Errorf("%s: blob name %q != row %q", r.Label(), c.Forename+" "+c.Surname, r.Name)
 		}
-		t.Logf("%s hours=%.1f zk=%d sk=%d dead=%v health=%.0f", r.Label(), c.HoursSurvived, c.ZombieKills, c.SurvivorKills, r.Dead, c.Health())
+		t.Logf("%s hours=%.1f zk=%d sk=%d dead=%v health=%.0f books=%d recipes=%d literature=%d printmedia=%d",
+			r.Label(), c.HoursSurvived, c.ZombieKills, c.SurvivorKills, r.Dead, c.Health(),
+			c.ReadBooks, c.KnownRecipes, c.ReadLiterature, c.ReadPrintMedia)
 	}
 }
