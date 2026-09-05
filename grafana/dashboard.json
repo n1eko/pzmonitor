@@ -1,4 +1,65 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "state-timeline",
+      "name": "State timeline",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -799,6 +860,87 @@
       ],
       "title": "Animals",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 5
+      },
+      "id": 52,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "pz_players_db_up",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "players.db Status",
+      "type": "stat",
+      "description": "1 if players.db was read and parsed successfully on the last scrape (PZMONITOR_PLAYERS_DB)"
     },
     {
       "datasource": {
@@ -2767,6 +2909,18 @@
           "format": "table",
           "legendFormat": "",
           "expr": "max by (username, name, profession) (pz_character_dead * on(username) group_left(name, profession) pz_character_info)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "G",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "",
+          "expr": "max by (username, name, profession) (pz_character_items * on(username) group_left(name, profession) pz_character_info)"
         }
       ],
       "transformations": [
@@ -2788,7 +2942,8 @@
               "Value #C": 4,
               "Value #D": 5,
               "Value #E": 6,
-              "Value #F": 7
+              "Value #F": 7,
+              "Value #G": 8
             },
             "renameByName": {
               "username": "User",
@@ -2798,7 +2953,8 @@
               "Value #C": "Zombie Kills",
               "Value #D": "Survivor Kills",
               "Value #E": "Health",
-              "Value #F": "Dead"
+              "Value #F": "Dead",
+              "Value #G": "Items"
             }
           }
         }
